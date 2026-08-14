@@ -1,0 +1,76 @@
+
+scalar Long
+
+type Query {
+    auth(email: String!, password: String!): Boolean!
+    disponibilites(
+        hotelId: Long!
+        email: String!
+        password: String!
+        nbPersonnes: Int!
+        ville: String!
+        dateDebut: Long!
+        dateFin: Long!
+    ): [ChambreDTO!]!
+}
+
+type Mutation {
+    reserverAuto(input: ReservationAutoInput!): Reservation!
+    annuler(email: String!, reference: String!): Boolean!
+}
+
+type ChambreDTO {
+    id: Long!
+    nomHotel: String!
+    adresse: Adresse!
+    type: String!
+    nombreLits: Int!
+    prix: Float!
+    image: String
+}
+
+type Adresse {
+    pays: String!
+    ville: String!
+    rue: String!
+    numero: String!
+    gps: String
+}
+
+input ReservationAutoInput {
+    agenceId: Long!
+    nomClient: String!
+    prenomClient: String!
+    email: String!
+    numeroCarte: String!
+    cvc: String!
+    prixTotal: Float!
+    nombreNuits: Int!
+    nbPersonnes: Int!
+    ville: String!
+    dateDebut: Long!
+    dateFin: Long!
+}
+
+type Reservation {
+    id: Long!
+    reference: String!
+    prixTotal: Float!
+    nombreNuits: Int!
+    dateDebut: Long!
+    dateFin: Long!
+    client: ClientInfo!
+    chambre: ChambreInfo!
+}
+
+type ClientInfo {
+    nom: String!
+    prenom: String!
+    email: String!
+}
+
+type ChambreInfo {
+    id: Long!
+    type: String!
+    nombreLits: Int!
+}

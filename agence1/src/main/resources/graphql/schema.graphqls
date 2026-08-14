@@ -1,0 +1,104 @@
+type Adresse {
+  pays: String
+  ville: String
+  rue: String
+  numero: String
+  gps: String
+}
+
+type Chambre {
+  id: ID!
+  nomHotel: String!
+  adresse: Adresse
+  type: String
+  nombreLits: Int
+  prix: Float
+  image: String
+}
+
+type ChambreDTO {
+  id: ID!
+  nomHotel: String!
+  adresse: Adresse!
+  type: String!
+  nombreLits: Int!
+  prix: Float!
+  reduction: Float
+  image: String
+  hasOffer: Boolean!
+  etoiles: Int!
+  dateDebut: Float
+  dateFin: Float
+  nombreNuits: Int!
+  prixTotal: Float!
+}
+
+type OffreAgence {
+  offreId: ID!
+  agenceId: ID!
+  chambreDTO: ChambreDTO!
+}
+
+type Query {
+  auth(email: String!, password: String!): Boolean!
+  testAuth(email: String!, password: String!): AuthResponse!
+  offres(
+    email: String!
+    password: String!
+    nbPersonnes: Int!
+    ville: String!
+    dateDebut: Float!
+    dateFin: Float!
+    agenceId: String
+  ): [OffreAgence!]!
+  offreById(agenceId: String!, offreId: String!): OffreAgence
+  disponibilites(
+    hotelId: ID!
+    email: String!
+    password: String!
+    nbPersonnes: Int!
+    ville: String!
+    dateDebut: ID!
+    dateFin: ID!
+  ): [Chambre]
+}
+
+type Mutation {
+  reserver(input: ReservationInput!): ReservationResponse!
+}
+
+input ReservationInput {
+  agenceId: String!
+  chambreId: String!
+  nomClient: String!
+  prenomClient: String!
+  email: String!
+  numeroCarte: String!
+  cvc: String!
+  prixTotal: Float!
+  nombreNuits: Int!
+  dateDebut: String!
+  dateFin: String!
+}
+
+type ReservationResponse {
+  id: ID
+  reference: String
+  prixTotal: Float
+  nombreNuits: Int
+  dateDebut: Float
+  dateFin: Float
+  client: ClientInfo
+  success: Boolean!
+  error: String
+}
+
+type ClientInfo {
+  nom: String!
+  prenom: String!
+  email: String!
+}
+
+type AuthResponse {
+  auth: Boolean!
+}

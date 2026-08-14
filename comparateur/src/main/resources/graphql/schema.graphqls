@@ -1,0 +1,42 @@
+
+type Query {
+    offres(
+        email: String
+        password: String
+        nbPersonnes: Int!
+        ville: String!
+        dateDebut: Float!
+        dateFin: Float!
+    ): [OffreAgence!]!
+}
+
+type OffreAgence {
+    offreId: ID!
+    agenceId: ID!
+    chambreDTO: ChambreDTO!
+}
+
+type ChambreDTO {
+    id: ID!
+    nomHotel: String!
+    adresse: Adresse!
+    type: String!
+    nombreLits: Int!
+    prix: Float!
+    reduction: Float
+    image: String
+    hasOffer: Boolean!
+    etoiles: Int!
+    dateDebut: Float
+    dateFin: Float
+    nombreNuits: Int!
+    prixTotal: Float!
+}
+
+type Adresse {
+    pays: String!
+    ville: String!
+    rue: String!
+    numero: String!
+    gps: String
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Réservation de la Chambre</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding: 30px;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            background: #3b82f6;
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .card-body p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-top: 12px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: 0.3s;
+        }
+        input:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 5px rgba(59,130,246,0.5);
+        }
+        input[readonly] {
+            background-color: #e9ecef;
+        }
+        .price {
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+        .reduction {
+            font-weight: bold;
+            color: #ef4444;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #059669;
+        }
+        .btn-cancel {
+            background: #ef4444;
+        }
+        .btn-cancel:hover {
+            background: #b91c1c;
+        }
+        .message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .message.success { color: #059669; }
+        .message.error { color: #ef4444; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+
+    <div class="card">
+        <div class="card-header">
+            <h3 th:text="${offre.chambreDTO.nomHotel}">Nom de l'hôtel</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Ville :</strong> <span th:text="${offre.chambreDTO.adresse.ville}">Ville</span></p>
+            <p><strong>Rue :</strong> <span th:text="${offre.chambreDTO.adresse.rue}">Rue</span></p>
+            <p><strong>Nombre de lits :</strong> <span th:text="${offre.chambreDTO.nombreLits}">2</span></p>
+            <p><strong>Type :</strong> <span th:text="${offre.chambreDTO.type}">Standard</span></p>
+            <p><strong>Prix par nuit :</strong>
+                <span class="price" th:text="${#numbers.formatDecimal(offre.chambreDTO.prix,1,'POINT',2,'POINT')} + ' €'">85 €</span>
+            </p>
+            <p th:if="${offre.chambreDTO.reduction != null and offre.chambreDTO.reduction > 0}">
+                <strong>Réduction :</strong>
+                <span class="reduction" th:text="${(offre.chambreDTO.reduction * 100)} + '%'">15%</span>
+            </p>
+            <p><strong>Date début :</strong> <span th:text="${#dates.format(offre.chambreDTO.dateDebut,'dd/MM/yyyy')}"></span></p>
+            <p><strong>Date fin :</strong> <span th:text="${#dates.format(offre.chambreDTO.dateFin,'dd/MM/yyyy')}"></span></p>
+            <p><strong>Nombre de nuits :</strong> <span th:text="${offre.chambreDTO.nombreNuits}"></span></p>
+            <p><strong>Prix total :</strong>
+                <span class="price" th:text="${#numbers.formatDecimal(offre.chambreDTO.prixTotal,1,'POINT',2,'POINT')} + ' €'">0 €</span>
+            </p>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Informations personnelles</h3>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/agence/reserver}" method="post">
+                <input type="hidden" name="agenceId" th:value="${offre.agenceId}" />
+                <input type="hidden" name="chambreId" th:value="${offre.chambreDTO.id}" />
+                <input type="hidden" name="prixTotal" th:value="${offre.chambreDTO.prixTotal}" />
+                <input type="hidden" name="nombreNuits" th:value="${offre.chambreDTO.nombreNuits}" />
+                <input type="hidden" name="dateDebut" th:value="${#dates.format(offre.chambreDTO.dateDebut,'yyyy-MM-dd')}" />
+                <input type="hidden" name="dateFin" th:value="${#dates.format(offre.chambreDTO.dateFin,'yyyy-MM-dd')}" />
+
+                <label>Nom</label>
+                <input type="text" name="nomClient" placeholder="Nom" required />
+
+                <label>Prénom</label>
+                <input type="text" name="prenomClient" placeholder="Prénom" required />
+
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Email" required />
+
+                <label>Numéro de carte</label>
+                <input type="text" name="numeroCarte" placeholder="0000 0000 0000 0000" required />
+
+                <label>CVC</label>
+                <input type="text" name="cvc" placeholder="CVC" required />
+
+                <button type="submit" class="btn">Réserver</button>
+            </form>
+
+            <p th:if="${message}" class="message success" th:text="${message}"></p>
+            <p th:if="${error}" class="message error" th:text="${error}"></p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
