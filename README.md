@@ -1,6 +1,6 @@
 # Système de Réservation d'Hôtels — Architecture GraphQL
 
-## 1. Prérequis
+##  Prérequis
 
 - Java 17
 - Maven
@@ -8,7 +8,7 @@
 - Environnement conseillé : Linux ou Windows
 - IDE recommandé : IntelliJ IDEA
 
-## 4. Lancement du projet
+##  Lancement du projet
 
 ### a) Importer les projets
 
@@ -52,7 +52,7 @@ Consulter l'interface web via un navigateur en tapant :
 | Agence1 | 15%           | 10%            |
 | Agence2 | pas de convention|  20%        |
 
-## 11. Auteur
+##  Auteur
 
 Sabrina MOUFOK 
 
